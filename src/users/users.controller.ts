@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { hashPasswordHelper } from 'src/helpers/util';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +11,8 @@ export class UsersController {
 
 
   // ✅ Tạo user mới
-  @Post()
+  @Public()
+  @Post('/register')
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto)
     return user
