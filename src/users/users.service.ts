@@ -64,4 +64,13 @@ export class UsersService {
     if(!user) throw new NotFoundException('User không tồn tại');
     return user 
   }
+  async findByEmail(email: string): Promise<UserDocument> {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new NotFoundException(
+        'Nếu email tồn tại, một liên kết đặt lại mật khẩu đã được gửi đi.',
+      );
+    }
+    return user;
+  }
 }
