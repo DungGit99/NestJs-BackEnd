@@ -27,7 +27,9 @@ import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
     //
   ],
   controllers: [AppController],
-  providers: [AppService,{
+  providers: [AppService,
+                 // ✅ đăng ký guard  trong module :
+      {
     provide: APP_GUARD,
     useClass: JwtAuthGuard
   }],
