@@ -5,11 +5,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { hashPasswordHelper } from 'src/helpers/util';
+import { Public } from 'src/common/decorators/public.decorator';
+import { v4 as uuidv4 } from 'uuid';
+import * as dayjs from 'dayjs';
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
   // 📌 Tạo user mới
-
+  @Public()
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, email, password, ...rest } = createUserDto;
     // check exist username , email
@@ -25,7 +29,9 @@ export class UsersService {
     const hashedPassword = await hashPasswordHelper(password)
     const createdUser = new this.userModel({
       ...rest, username,
-      email, password: hashedPassword
+      email, password: hashedPassword,
+      codeId: uuidv4(),
+      codeExpired: dayjs().add(15, 'minutes'),
     });
     return createdUser.save();
   }
