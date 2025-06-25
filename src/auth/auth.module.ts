@@ -9,7 +9,6 @@ import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
 
 @Module({
-  
   imports: [
     UsersModule,
     //✅  Sử dụng trong Passport local:
@@ -26,8 +25,9 @@ import { JwtStrategy } from './passport/jwt.strategy';
         };
       },
       inject: [ConfigService],
-    })],
-    controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy]
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}

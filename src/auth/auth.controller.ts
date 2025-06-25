@@ -7,9 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './passport/local-auth.guard';
-import { JwtAuthGuard } from './passport/jwt-auth.guard';
 import { Public } from 'src/common/decorators/public.decorator';
 import { ForgotPasswordDto } from './dto/auth.dto';
 
@@ -29,6 +27,7 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
+
   @Public()
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {

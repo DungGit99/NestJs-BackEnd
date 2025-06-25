@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,7 +15,7 @@ import * as dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
   // 📌 Tạo user mới
   @Public()
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -23,13 +27,15 @@ export class UsersService {
     }
     const existingEmail = await this.userModel.findOne({ email });
     if (existingEmail) {
-      throw new BadRequestException('Email đã được sử dụng')
+      throw new BadRequestException('Email đã được sử dụng');
     }
     //
-    const hashedPassword = await hashPasswordHelper(password)
+    const hashedPassword = await hashPasswordHelper(password);
     const createdUser = new this.userModel({
-      ...rest, username,
-      email, password: hashedPassword,
+      ...rest,
+      username,
+      email,
+      password: hashedPassword,
       codeId: uuidv4(),
       codeExpired: dayjs().add(15, 'minutes'),
     });
@@ -48,9 +54,11 @@ export class UsersService {
   }
   // 📌 Cập nhật user
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
-      new: true,
-    }).exec();
+    const user = await this.userModel
+      .findByIdAndUpdate(id, updateUserDto, {
+        new: true,
+      })
+      .exec();
     if (!user) throw new NotFoundException('User không tồn tại');
     return user;
   }
@@ -59,17 +67,15 @@ export class UsersService {
     const result = await this.userModel.findByIdAndDelete(id).exec();
   }
 
-  async findByUsername(username:string): Promise<User>{
-    const user = await this.userModel.findOne({username})
-    if(!user) throw new NotFoundException('User không tồn tại');
-    return user 
+  async findByUsername(username: string): Promise<User> {
+    const user = await this.userModel.findOne({ username });
+    if (!user) throw new NotFoundException('User không tồn tại');
+    return user;
   }
-  async findByEmail(email: string): Promise<UserDocument> {
+  async findByEmail(email: string): Promise<UserDocument | null> {
     const user = await this.userModel.findOne({ email });
     if (!user) {
-      throw new NotFoundException(
-        'Nếu email tồn tại, một liên kết đặt lại mật khẩu đã được gửi đi.',
-      );
+      return null;
     }
     return user;
   }

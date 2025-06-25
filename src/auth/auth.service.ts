@@ -34,10 +34,14 @@ export class AuthService {
 
   async forgotPassword(email: string): Promise<{ message: string }> {
     const user = await this.usersService.findByEmail(email);
-    if (!user) throw new NotFoundException();
+    if (!user) {
+      throw new NotFoundException('Email không hợp lệ, vui lòng kiểm tra !!!');
+    }
+
     user.codeId = uuidv4();
     user.codeExpired = dayjs().add(15, 'minutes').toDate();
     await user.save();
+
     return { message: 'Mật khẩu đã được đặt lại thành công.' };
   }
 }
