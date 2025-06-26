@@ -47,7 +47,7 @@ export class UsersService {
     return this.userModel.find().select('-password').exec(); // bỏ password
   }
   // 📌 Tìm user theo ID
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserDocument> {
     const user = await this.userModel.findById(id).select('-password').exec();
     if (!user) throw new NotFoundException('User không tồn tại');
     return user;
@@ -78,5 +78,24 @@ export class UsersService {
       return null;
     }
     return user;
+  }
+
+  async updatePassword(userId: string, hashedPassword: string): Promise<void> {
+    // console.log(userId);
+    const user = await this.userModel.findById({ _id: userId });
+    if (!user) {
+      throw new NotFoundException('Người dùng không tồn tại.');
+    }
+    user.password = hashedPassword;
+    await user.save();
+  }
+  // Xóa thông tin reset token sau khi sử dụng
+  async clearUserResetTokenInfo(userId: string): Promise<void> {
+    await this.userModel
+      .findByIdAndUpdate(userId, {
+        codeId: null,
+        CodeExpired: null,
+      })
+      .exec();
   }
 }

@@ -7,7 +7,7 @@ export class MailController {
   constructor(private readonly mailService: MailService) {}
   @Public()
   @Get('send')
-  sendMai(@Query('email') email: string) {
-    return this.mailService.sendWelcomeEmail(email);
+  sendPasswordResetEmail(@Query('email') email: string, token: string) {
+    return this.mailService.sendPasswordResetEmail(email, token);
   }
 }

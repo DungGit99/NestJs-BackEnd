@@ -7,9 +7,11 @@ import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
+    MailModule, // ✅ thêm mailService vào đây,
     UsersModule,
     //✅  Sử dụng trong Passport local:
     PassportModule,

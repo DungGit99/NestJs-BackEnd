@@ -10,42 +10,41 @@ export type UserDocument = User & Document;
 // Nó là cú pháp rút gọn và typescript-friendly để xây dựng schema với NestJS.
 @Schema()
 export class User {
+  @Prop({ required: true, unique: true }) // Bắt buộc có username
+  username: string;
 
-    @Prop({ required: true,unique:true }) // Bắt buộc có username
-    username: string;
+  @Prop()
+  name: string;
 
-    @Prop()
-    name: string;
+  @Prop({ unique: true })
+  email: string;
 
-    @Prop({unique:true})
-    email: string;
+  @Prop()
+  password: string;
 
-    @Prop()
-    password: string;
+  @Prop()
+  phone: string;
 
-    @Prop()
-    phone: string;
+  @Prop()
+  address: string;
 
-    @Prop()
-    address: string;
+  @Prop()
+  image: string;
 
-    @Prop()
-    image: string;
+  @Prop({ enum: ['ADMIN', 'USER'], efault: 'USER' })
+  role: string;
 
-    @Prop({ enum: ['ADMIN', 'USER'],efault: "USER" })
-    role: string;
+  @Prop({ default: 'LOCAL' })
+  accountType: string;
 
-    @Prop({ default: "LOCAL" })
-    accountType: string;
+  @Prop({ default: false })
+  isActive: boolean;
 
-    @Prop({ default: false })
-    isActive: boolean;
+  @Prop()
+  codeId: string;
 
-    @Prop()
-    codeId: string;
-
-    @Prop()
-    codeExpired: Date;
+  @Prop()
+  codeExpired: Date;
 }
 
 // Tạo schema từ class

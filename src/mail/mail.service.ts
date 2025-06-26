@@ -5,14 +5,14 @@ import { Injectable } from '@nestjs/common';
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendWelcomeEmail(to: string) {
+  async sendPasswordResetEmail(email: string, token) {
     await this.mailerService.sendMail({
-      to,
+      to: email,
       subject: 'Chào mừng bạn!',
       template: 'forgotPassword', // Tên file hbs không cần phần mở rộng
       context: {
-        name: to, // sẽ được dùng trong {{name}} của template
-        resetLink: '',
+        name: email, // sẽ được dùng trong {{name}} của template
+        resetLink: `http://localhost:8080/api/auth/reset-password?token=${token}`,
         expiresInHours: '15 phút',
         companyName: 'Nestjs',
       },
